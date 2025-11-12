@@ -1,4 +1,7 @@
-//#include <arch/zx.h>
+
+//#link "util.c"
+
+//#link "plot.c"
 #include <stdlib.h>
 
 #include "util.h"
