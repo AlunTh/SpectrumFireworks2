@@ -1,4 +1,8 @@
 
+#include "draw.h"
+
+//#link "draw.c"
+
 //#link "util.c"
 
 //#link "plot.c"
@@ -31,6 +35,8 @@ int main( int argc, char **argv )
       plot(j,i);
     }
   }
+  moveTo(10,10);
+  drawTo(110,60);
 
   model_initFireworks(19);
 
