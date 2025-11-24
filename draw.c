@@ -5,6 +5,21 @@
 
 static unsigned char lastX=0,lastY=0;
 
+void polyline( unsigned char *base, int count )
+{
+  for( ; count>0 ; count-- , base+=3 ) {
+    switch (base[0])
+    {
+      case 'M':
+        moveTo( base[1], base[2] );
+        break;
+      case 'D':
+        drawTo( base[1], base[2] );
+        break;
+    }
+  }
+}
+
 void moveTo( unsigned char x, unsigned char y)
 {
   lastX = x;
