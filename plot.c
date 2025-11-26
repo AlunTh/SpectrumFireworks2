@@ -2,6 +2,7 @@
 #include "plot.h"
 
 #define SCREEN_BASE 0x4000
+#define ATTR_BASE 0x5800
 
 unsigned char *zx_pxy2saddr(unsigned char x, unsigned char y)
 {
@@ -30,6 +31,12 @@ void invertplot(unsigned char x, unsigned char y)
 {
    unsigned char y2 = 191-y;
    *zx_pxy2saddr(x,y2) ^= zx_px2bitmask(x);
+}
+
+void setPixelAttr(unsigned char x, unsigned char y, unsigned char a)
+{
+   unsigned char y2 = 191-y;
+   *((unsigned char*)ATTR_BASE+(y2/8)*32+x/8) = a;
 }
 
 #define DEBUG 0

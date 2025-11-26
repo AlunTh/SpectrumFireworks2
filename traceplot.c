@@ -31,6 +31,7 @@ void traceplot_init( int buffsize, int pers )
 void pop(void)
 {
   invertplot( buffer[tail].x, buffer[tail].y );
+  setPixelAttr(buffer[tail].x, buffer[tail].y, PAPER(BLACK)+INK(BLUE));
   tail = (tail+1)%maxpoints;
   --count;
 }
@@ -38,6 +39,7 @@ void pop(void)
 void push( int frame, unsigned char x, unsigned char y )
 {
   invertplot(x,y);
+  setPixelAttr(x,y, PAPER(BLACK)|INK(WHITE)|BRIGHT);
   head = (head+1)%maxpoints;
   ++count;
   buffer[head].frame = frame;

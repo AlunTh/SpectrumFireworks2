@@ -31,8 +31,8 @@ int main( int argc, char **argv )
   //int i,j;
   argc=argc,argv=argv;
   
-  zx_border(INK(WHITE)+PAPER(BLUE));
-  zx_cls(/*PAPER_BLACK+INK_WHITE*/);
+  zx_border(BLACK);
+  zx_cls(PAPER(BLACK)+INK(BLUE));
   srand(1);
 
   /*

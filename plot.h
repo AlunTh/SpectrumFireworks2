@@ -7,6 +7,7 @@
 void plot(unsigned char x, unsigned char y);
 void unplot(unsigned char x, unsigned char y);
 void invertplot(unsigned char x, unsigned char y);
+void setPixelAttr(unsigned char x, unsigned char y, unsigned char a);
 
 #endif /* PLOT_H */
 

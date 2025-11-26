@@ -18,8 +18,9 @@ void zx_border( unsigned char colour )
 }
 
 
-void zx_cls( void )
+void zx_cls( unsigned char attr )
 {
+  *SV_ATTR_P = attr;
   __asm
     call 0x0d6b
   __endasm;
