@@ -48,7 +48,8 @@ int main( int argc, char **argv )
   */
   //polyline( test2, sizeof(test2)/3 );
   //polyline( test, sizeof(test)/3 );
-  polyline( place_vancouver, sizeof(place_vancouver)/3 );
+  //polyline( place_vancouver, sizeof(place_vancouver)/3 );
+  polyline( place_london, sizeof(place_london)/3 );
 
   model_initFireworks(19);
 

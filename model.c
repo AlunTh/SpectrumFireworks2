@@ -23,9 +23,15 @@ static int active=0;
 typedef struct firework_s firework;
 typedef void (*firework_expiryHandler)( firework *f );
 
+enum firework_type {
+  none=0,
+  normal=1,
+  fuse=2
+};
+
 struct firework_s
 {
-  unsigned char active;
+  enum firework_type type;
   int x;
   int y;
   int vx;
@@ -53,7 +59,7 @@ firework *findUnused( void )
   int i;
   for (i=0; i<maxFireworks; i++ )
   {
-    if (fireworks[i].active == 0 )
+    if (fireworks[i].type != none )
     {
       return &(fireworks[i]);
     }
@@ -71,7 +77,7 @@ void expiry_explode_internal( firework *f, int speed, int life )
     newf = findUnused();
     if (newf != NULL )
     {
-      newf->active = 1;
+      newf->type = normal;
       newf->x = f->x;
       newf->y = f->y;
       newf->vx = (f->vx/8)+clock[dir].x*speed/100;
@@ -117,7 +123,7 @@ void expiry_explode_chained( firework *f )
     newf = findUnused();
     if (newf != NULL )
     {
-      newf->active = 1;
+      newf->type = normal;
       newf->x = f->x;
       newf->y = f->y;
       newf->vx = (f->vx/8)+clock[dir].x*speed/100;
@@ -140,7 +146,7 @@ void random_spawn( void )
     int dir;
 
     dir = ( rand()%4 + 10 ) % 12;
-    newf->active = 1;
+    newf->type = normal;
     newf->x = 16*(128 + 20*(rand()%5-rand()%5));
     newf->y = 0;
     newf->vx = clock[dir].x*speedpct/100;
@@ -166,7 +172,7 @@ void model_initFireworks(int n)
 
   for (i=0; i<maxFireworks; i++)
   {
-    fireworks[i].active = 0;
+    fireworks[i].type = none;
   }
 
   traceplot_newFrame();
@@ -185,33 +191,33 @@ int model_mainLoop(void)
   {
     firework *f = &(fireworks[i]); 
     //printf("(%d,%d) v:(%d,%d)\n",f->x/16,f->y/16,f->vx,f->vy);
-    if ( fireworks[i].active == 0 )
+    if ( f->type == none )
     {
       continue;
     }
     new_active++;
-    if ( fireworks[i].life==0 )
+    if ( f->life==0 )
     {
-      fireworks[i].active = 0;
-      if ( fireworks[i].expiryHandler != NULL )
+      f->type = none;
+      if ( f->expiryHandler != NULL )
       {
         (*(f->expiryHandler))( f );
       }
       continue;
     }
 
-    fireworks[i].x = (fireworks[i].x+fireworks[i].vx);
-    fireworks[i].y = (fireworks[i].y+fireworks[i].vy);
-    if (fireworks[i].y < 0 || fireworks[i].x < 0 
-    ||  fireworks[i].y > 191*16 || fireworks[i].x >255*16 )
+    f->x = (f->x+f->vx);
+    f->y = (f->y+f->vy);
+    if (f->y < 0 || f->x < 0 
+    ||  f->y > 191*16 || f->x >255*16 )
     {
-      fireworks[i].active = 0;
+      f->type = none;
       continue;
     }
-    --fireworks[i].vy;
-    --fireworks[i].life;
+    --(f->vy);
+    --(f->life);
 
-    traceplot(fireworks[i].x/16,fireworks[i].y/16);
+    traceplot(f->x/16,f->y/16);
     /*
     if ( rand()%100 == 0 ) {
     	zx_beep( 100+1000*(fireworks[i].vy+fireworks[i].vx), 0.1 );
