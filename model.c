@@ -166,6 +166,8 @@ void model_initFireworks(int n)
 {
   int i;
   maxFireworks = n;
+  printf("model_initFireworks(%d)\n",n);
+  while(1);
   fireworks = malloc( sizeof(firework) * maxFireworks );
 
   traceplot_init( n*10, 10 );
@@ -183,14 +185,18 @@ void model_cleanup()
   free( fireworks );
 }
 
+char debug[160];
 int model_mainLoop(void)
 {
   int i;
   int new_active=0;
-  for (i=0; i<maxFireworks; i++)
+  printf("model_mainLoop()\n");
+  while(1);
+  *SV_ATTR_P = PAPER(BLACK)|INK(WHITE);
+  for (i=0; i<1/*maxFireworks*/; i++)
   {
     firework *f = &(fireworks[i]); 
-    //printf("(%d,%d) v:(%d,%d)\n",f->x/16,f->y/16,f->vx,f->vy);
+    printf("(%d,%d) v:(%d,%d)\n",f->x/16,f->y/16,f->vx,f->vy);
     if ( f->type == none )
     {
       continue;
@@ -217,7 +223,7 @@ int model_mainLoop(void)
     --(f->vy);
     --(f->life);
 
-    traceplot(f->x/16,f->y/16);
+    //traceplot(f->x/16,f->y/16);
     /*
     if ( rand()%100 == 0 ) {
     	zx_beep( 100+1000*(fireworks[i].vy+fireworks[i].vx), 0.1 );
@@ -230,7 +236,7 @@ int model_mainLoop(void)
     random_spawn();
   }
 
-  traceplot_newFrame();
+  //traceplot_newFrame();
 
   return true;
 }

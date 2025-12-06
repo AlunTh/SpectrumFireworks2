@@ -9,6 +9,7 @@
 
 //#link "plot.c"
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "util.h"
 #include "model.h"
@@ -32,7 +33,9 @@ int main( int argc, char **argv )
   argc=argc,argv=argv;
   
   zx_border(BLACK);
-  zx_cls(PAPER(BLACK)+INK(BLUE));
+  //zx_cls(PAPER(GREEN));
+  printf("\nmain()\n");
+  
   srand(1);
 
   /*
@@ -55,6 +58,8 @@ int main( int argc, char **argv )
 
   while( model_mainLoop() )
   {
+  while(1);
+  return(0);
     ; // empty loop, just call function until false 
   }
   
