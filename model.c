@@ -1,6 +1,8 @@
 //#include <arch/zx.h>
 //#include <alloc/malloc.h>
-#include <stdio.h>
+#ifdef DEBUG
+  #include <stdio.h>
+#endif
 #include <stdlib.h>
 
 #include "traceplot.h"
@@ -59,7 +61,7 @@ firework *findUnused( void )
   int i;
   for (i=0; i<maxFireworks; i++ )
   {
-    if (fireworks[i].type != none )
+    if (fireworks[i].type == none )
     {
       return &(fireworks[i]);
     }
@@ -141,6 +143,7 @@ void random_spawn( void )
 {
   firework *newf = findUnused();
   int speedpct=100;
+  //printf("random_spawn()\n");
   if (newf != NULL )
   {
     int dir;
@@ -154,6 +157,12 @@ void random_spawn( void )
     newf->life = (rand()%20+10)*100/speedpct;
     newf->expiryHandler = explosions[ rand()%5 ];
   }
+  #ifdef DEBUG
+    else
+    {
+	  printf("full\n");
+    }
+  #endif
 }
 
 void expiry_random_respawn( firework *f )
@@ -166,8 +175,7 @@ void model_initFireworks(int n)
 {
   int i;
   maxFireworks = n;
-  printf("model_initFireworks(%d)\n",n);
-  while(1);
+  //printf("model_initFireworks(%d)\n",n);
   fireworks = malloc( sizeof(firework) * maxFireworks );
 
   traceplot_init( n*10, 10 );
@@ -190,13 +198,12 @@ int model_mainLoop(void)
 {
   int i;
   int new_active=0;
-  printf("model_mainLoop()\n");
-  while(1);
+  //printf("model_mainLoop()\n");
   *SV_ATTR_P = PAPER(BLACK)|INK(WHITE);
-  for (i=0; i<1/*maxFireworks*/; i++)
+  for (i=0; i<maxFireworks; i++)
   {
     firework *f = &(fireworks[i]); 
-    printf("(%d,%d) v:(%d,%d)\n",f->x/16,f->y/16,f->vx,f->vy);
+    //printf("%d: t:%d (%d,%d) v:(%d,%d)\n",i,f->type,f->x/16,f->y/16,f->vx,f->vy);
     if ( f->type == none )
     {
       continue;
@@ -223,7 +230,7 @@ int model_mainLoop(void)
     --(f->vy);
     --(f->life);
 
-    //traceplot(f->x/16,f->y/16);
+    traceplot(f->x/16,f->y/16);
     /*
     if ( rand()%100 == 0 ) {
     	zx_beep( 100+1000*(fireworks[i].vy+fireworks[i].vx), 0.1 );

@@ -39,8 +39,8 @@ void setPixelAttr(unsigned char x, unsigned char y, unsigned char a)
    *((unsigned char*)ATTR_BASE+(y2/8)*32+x/8) = a;
 }
 
-#define DEBUG 0
-#if DEBUG
+#define SOLODEBUG 0
+#if SOLODEBUG
 #include "util.h"
 //#link "util.c"
 //#resource "util.h"
@@ -54,9 +54,13 @@ void main(int argc, char *argv)
 
   argc=argc, argv=argv;
   p=zx_pxy2saddr(x,y);
-  printf("::: %p :::\n\n",p);
+  #ifdef DEBUG
+    printf("::: %p :::\n\n",p);
+  #endif
   p=zx_pxy2saddr(0,8);
-  printf("::: %p :::\n\n",p);
+  #ifdef DEBUG
+    printf("::: %p :::\n\n",p);
+  #endif
   plot(x,y);
   
   zx_cls();
