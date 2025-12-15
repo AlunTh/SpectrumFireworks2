@@ -1,4 +1,4 @@
-OBJECTS = main.o model.o plot.o traceplot.o draw.o util.o
+OBJECTS = main.o model.o plot.o traceplot.o draw.o util.o show.o
 
 # -startup=31 has no stdio
 

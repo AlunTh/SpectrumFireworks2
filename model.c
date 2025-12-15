@@ -21,27 +21,6 @@ static int frames=0;
 
 static int active=0;
 
-
-typedef struct firework_s firework;
-typedef void (*firework_expiryHandler)( firework *f );
-
-enum firework_type {
-  none=0,
-  normal=1,
-  fuse=2
-};
-
-struct firework_s
-{
-  enum firework_type type;
-  int x;
-  int y;
-  int vx;
-  int vy;
-  int life;
-  firework_expiryHandler expiryHandler;
-};
-
 void expiry_random_respawn( firework *f );
 
 static struct clock_s
@@ -109,6 +88,11 @@ void expiry_explode_tiny( firework *f )
   expiry_explode_internal( f, 60, 8 );
 }
 
+void expiry_explode_supertiny( firework *f )
+{
+  expiry_explode_internal( f, 10, 8 );
+}
+
 void expiry_explode_cloud( firework *f )
 {
   expiry_explode_internal( f, 30, 50 );
@@ -139,6 +123,35 @@ void expiry_explode_chained( firework *f )
 
 static firework_expiryHandler explosions[] = {expiry_explode_big, expiry_explode_small, expiry_explode_tiny, expiry_explode_cloud, expiry_explode_chained};
 
+void spawnNormal( 
+	int startx,
+	int starty,
+	int vx,
+	int vy,
+	firework_expiryHandler expiryHandler,
+	int fuse,
+	int life
+)
+{
+  firework *newf = findUnused();
+  if (newf != NULL )
+  {
+    newf->type = normal;
+    newf->x = startx;
+    newf->y = starty;
+    newf->vx = vx;
+    newf->vy = vy;
+    newf->fuse = fuse;
+    newf->life = life;
+    newf->expiryHandler = expiryHandler;
+  }
+  #ifdef DEBUG
+    else
+    {
+	  printf("full\n");
+    }
+  #endif
+}
 void random_spawn( void )
 {
   firework *newf = findUnused();
@@ -154,6 +167,7 @@ void random_spawn( void )
     newf->y = 0;
     newf->vx = clock[dir].x*speedpct/100;
     newf->vy = ((20+rand()%80)*clock[dir].y/100)*speedpct/100;
+    newf->fuse = 0;
     newf->life = (rand()%20+10)*100/speedpct;
     newf->expiryHandler = explosions[ rand()%5 ];
   }
@@ -175,7 +189,9 @@ void model_initFireworks(int n)
 {
   int i;
   maxFireworks = n;
-  //printf("model_initFireworks(%d)\n",n);
+  #ifdef DEBUG
+    printf("model_initFireworks(%d)\n",n);
+  #endif
   fireworks = malloc( sizeof(firework) * maxFireworks );
 
   traceplot_init( n*10, 10 );
@@ -194,11 +210,13 @@ void model_cleanup()
 }
 
 char debug[160];
-int model_mainLoop(void)
+int model_mainLoop(int respawnOnExpiry)
 {
   int i;
   int new_active=0;
-  //printf("model_mainLoop()\n");
+  #ifdef DEBUG
+    printf("model_mainLoop()\n");
+  #endif
   *SV_ATTR_P = PAPER(BLACK)|INK(WHITE);
   for (i=0; i<maxFireworks; i++)
   {
@@ -218,19 +236,26 @@ int model_mainLoop(void)
       }
       continue;
     }
-
-    f->x = (f->x+f->vx);
-    f->y = (f->y+f->vy);
-    if (f->y < 0 || f->x < 0 
-    ||  f->y > 191*16 || f->x >255*16 )
+    
+    if ( f->fuse > 0 )
     {
-      f->type = none;
-      continue;
-    }
-    --(f->vy);
+		f->fuse --;
+	}
+	else
+    {
+		f->x = (f->x+f->vx);
+		f->y = (f->y+f->vy);
+		if (f->y < 0 || f->x < 0 
+		||  f->y > 191*16 || f->x >255*16 )
+		{
+		  f->type = none;
+		  continue;
+		}
+		--(f->vy);
+		traceplot(f->x/16,f->y/16);
+	}
     --(f->life);
 
-    traceplot(f->x/16,f->y/16);
     /*
     if ( rand()%100 == 0 ) {
     	zx_beep( 100+1000*(fireworks[i].vy+fireworks[i].vx), 0.1 );
@@ -238,13 +263,14 @@ int model_mainLoop(void)
     */
   }
   active = new_active;
-  if ( active == 0 )
+  if ( active == 0 && respawnOnExpiry )
   {
     random_spawn();
+    active = 1;
   }
 
-  //traceplot_newFrame();
+  traceplot_newFrame();
 
-  return true;
+  return active;
 }
 
