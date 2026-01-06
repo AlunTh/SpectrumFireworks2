@@ -1,0 +1,27 @@
+Semi-random launch to hit a particular point and time.
+
+Say that target is at (tx,ty) at t=0, assume that launch takes place at some
+t<0
+
+We need to compute:
+	Launch x,y , vx, vy and lifetime
+	
+(after we've computed this, for a set of targets to be hit at the same time,
+we can them bump them up by adding -(min(t)) to all of them)
+
+Can compute launch vx, vy and lifetime separately. vy and lifetime are more important
+to do first.
+
+Minimum vy will be that required to just reach the altitude
+
+y= 1/2 a t^2
+t^2 = 2y / a
+t_min = SQRT(2y/a) 
+
+vy_min = t_min*a
+
+Maximum vy will be that required to just reach the top of the screen (Ymax)
+
+t_Ymax = SQRT(2Ymax/a)
+
+vy_max = t_Ymax*a

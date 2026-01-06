@@ -28,6 +28,12 @@ void traceplot_init( int buffsize, int pers )
   buffer = malloc( buffsize*sizeof(struct tracepoint) );
 }
 
+void traceplot_clear()
+{
+  head=tail;
+  count=0;
+}
+
 void pop(void)
 {
   invertplot( buffer[tail].x, buffer[tail].y );
@@ -74,7 +80,6 @@ int main( int argc, char **argv )
 {
   unsigned char x,/*y,*/f;
   argc=argc; argv=argv;
-  zx_border(PAPER_BLUE);
   traceplot_init( 1000, 75 );
 
   /* moving in a line left to right */

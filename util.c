@@ -12,9 +12,13 @@ int putchar(int ch) {
 
 // ---------------------------------------
 
-void zx_border( unsigned char colour )
+void zx_border_black()
 {
-  *((unsigned char *)0x5C48) = colour;
+  __asm
+	ld a, 0x38
+	out (0xFE), a
+  __endasm;
+  return;
 }
 
 
@@ -44,3 +48,13 @@ void zx_beep( unsigned int tone, unsigned int dur )
   return;
 }
 
+void zx_setInputAreaAttrs(void)
+{
+	unsigned char *p;
+	unsigned int i;
+	
+	for (p=ATTR_BASE+(32*22), i=0 ; i<64 ; p++, i++ )
+	{
+		*p = *SV_ATTR_P;
+	}
+}

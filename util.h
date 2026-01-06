@@ -1,5 +1,5 @@
 #define INK(c) (c)
-#define PAPER(c) ((c)<<4)
+#define PAPER(c) ((c)<<3)
 
 
 #define BLACK 0
@@ -16,8 +16,9 @@
 
 // ------------------------------
 #define SV_ATTR_P ((unsigned char *)23693)
+#define ATTR_BASE ((unsigned char *)0x5800)
 
-void zx_border( unsigned char colour );
+void zx_border_black();
 void zx_cls( unsigned char attr );
 void zx_beep( unsigned int tone, unsigned int dur );
-
+void zx_setInputAreaAttrs(void);

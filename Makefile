@@ -14,6 +14,9 @@ debug: DEBUGBUILD="-DDEBUG"
 debug: STARTUP=0
 debug: clean fireworks
 
+traceplot.o: traceplot.h
+main.o: places.h traceplot.h
+
 .c.o:
 	zcc +zx -vn --opt-code-speed=all $(DEBUGBUILD) -clib=sdcc_iy -startup=$(STARTUP) $< -c -o $@ 
 

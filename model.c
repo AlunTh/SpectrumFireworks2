@@ -100,8 +100,8 @@ void expiry_explode_cloud( firework *f )
 
 void expiry_explode_chained( firework *f )
 {
-  int speed=90;
-  int life=20;
+  int speed=25;
+  int life=14;
   int dir;
   firework *newf;
   for ( dir=0; dir<12 ; dir++ )
@@ -115,7 +115,7 @@ void expiry_explode_chained( firework *f )
       newf->vx = (f->vx/8)+clock[dir].x*speed/100;
       newf->vy = (f->vy/8)+clock[dir].y*speed/100;
       newf->life = life;
-      newf->expiryHandler = expiry_explode_tiny;
+      newf->expiryHandler = expiry_explode_supertiny;
     }
   }
 }
@@ -161,12 +161,12 @@ void random_spawn( void )
   {
     int dir;
 
-    dir = ( rand()%4 + 10 ) % 12;
+    dir = ( rand()%3 + 11 ) % 12;
     newf->type = normal;
     newf->x = 16*(128 + 20*(rand()%5-rand()%5));
     newf->y = 0;
     newf->vx = clock[dir].x*speedpct/100;
-    newf->vy = ((20+rand()%80)*clock[dir].y/100)*speedpct/100;
+    newf->vy = ((20+rand()%60)*clock[dir].y/100)*speedpct/100;
     newf->fuse = 0;
     newf->life = (rand()%20+10)*100/speedpct;
     newf->expiryHandler = explosions[ rand()%5 ];
@@ -226,7 +226,6 @@ int model_mainLoop(int respawnOnExpiry)
     {
       continue;
     }
-    new_active++;
     if ( f->life==0 )
     {
       f->type = none;
@@ -254,6 +253,7 @@ int model_mainLoop(int respawnOnExpiry)
 		--(f->vy);
 		traceplot(f->x/16,f->y/16);
 	}
+    new_active++;
     --(f->life);
 
     /*
