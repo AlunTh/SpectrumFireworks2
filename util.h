@@ -22,3 +22,4 @@ void zx_border_black();
 void zx_cls( unsigned char attr );
 void zx_beep( unsigned int tone, unsigned int dur );
 void zx_setInputAreaAttrs(void);
+void zx_fadeAttrs(void);

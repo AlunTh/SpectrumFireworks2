@@ -12,6 +12,14 @@ Possible future enhancements:
 Ability to generate a string of timed fireworks that explode in the pattern of particular strings (eg. so it can spell out "happy birthday" or the year).
 
 Alternative way of colouring cells: have a defined sequence of colour+bright values that a cell fades through after being set to the brightest, gradually falling back to the dimmest.
+Possible sequence:
+	bright 1 ink 7 - bright white 71
+	bright 1 ink 5 - bright cyan  69
+	bright 0 ink 5 - cyan          5
+	bright 1 ink 1 - bright blue  65
+	bright 0 ink 1 - blue          1
+
+
 
 The random spawn should sometimes spawn back to the initial "show".
 

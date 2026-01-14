@@ -81,6 +81,7 @@ int main( int argc, char **argv )
           default:
             break;
 	  }
+	  zx_fadeAttrs();
   }
   
   model_cleanup();

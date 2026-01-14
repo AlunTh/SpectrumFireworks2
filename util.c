@@ -58,3 +58,28 @@ void zx_setInputAreaAttrs(void)
 		*p = *SV_ATTR_P;
 	}
 }
+
+void zx_fadeAttrs(void) {
+	#define step 3
+	unsigned char *p, *endp;
+	static unsigned char o=step-1;
+	
+	o = (o+1)%step;
+	for (p=ATTR_BASE+o, endp=ATTR_BASE+(32*24); p<endp ; p+=step )
+	{
+		switch (*p)
+		{
+			case 65:
+				*p = 1;
+				break;
+			case 5:
+				*p = 65;
+				break;
+			case 69:
+				*p = 5;
+				break;
+			case 71:
+				*p = 69;
+		}
+	}
+}

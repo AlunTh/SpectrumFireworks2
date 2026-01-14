@@ -37,7 +37,7 @@ void traceplot_clear()
 void pop(void)
 {
   invertplot( buffer[tail].x, buffer[tail].y );
-  setPixelAttr(buffer[tail].x, buffer[tail].y, PAPER(BLACK)+INK(BLUE));
+  //setPixelAttr(buffer[tail].x, buffer[tail].y, PAPER(BLACK)+INK(BLUE));
   tail = (tail+1)%maxpoints;
   --count;
 }
